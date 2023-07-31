@@ -91,7 +91,7 @@ export const SmallCard = ({ className, children }: { className?: string; childre
   >
     <div
       className={[
-        'rounded-2xl text-sm px-4 sm:px-8 lg:px-10 py-4 flex flex-col sm:flex-row justify-between items-center backdrop-blur-md',
+        'rounded-2xl text-sm text-[#9296AA] p-2 flex flex-row justify-between items-center backdrop-blur-md',
         'bg-[#030A0C]',
       ].join(' ')}
     >
@@ -161,9 +161,9 @@ export const AccordionHeader = ({
           </span>
         </Badge>
       )}
-      {shipped && <span className="text-scale-1200 text-lg mt-3 sm:mt-0">{title}</span>}
+      {shipped && <span className="text-scale-1200 text-lg mt-1 sm:mt-0">{title}</span>}
       {shippable && !shipped && (
-        <span className="text-sm font-normal text-[#A0A0A0] mt-3 sm:mt-0 flex items-center gap-2 md:gap-4">
+        <span className="text-sm font-normal text-[#A0A0A0] mt-1 sm:mt-0 flex items-center gap-1 md:gap-4">
           <svg
             width="17"
             height="17"
