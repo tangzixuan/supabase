@@ -85,7 +85,7 @@ export const HackernewsSvg = () => (
 export const SmallCard = ({ className, children }: { className?: string; children: any }) => (
   <div
     className={[
-      'relative p-[1px] bg-gradient-to-b from-[#48484880] to-[#1C1C1C60] rounded-2xl overflow-hidden shadow-lg',
+      'relative p-[1px] bg-gradient-to-b from-[#111718] to-[#1C1C1C60] rounded-2xl overflow-hidden shadow-lg',
       className,
     ].join(' ')}
   >
@@ -127,12 +127,14 @@ export const AccordionHeader = ({
   title,
   shipped,
   publishedAt,
+  shippable = true,
 }: {
   date: string
   day: string
   title: string
-  shipped: boolean
+  shipped?: boolean
   publishedAt: string
+  shippable?: boolean
 }) => {
   return (
     <div className="flex flex-1 flex-col sm:flex-row">
@@ -145,23 +147,22 @@ export const AccordionHeader = ({
             </span>
           )}
         </span>
-
-        {shipped && (
-          <Badge
-            className={`relative inset-0 !bg-transparent !py-1 !px-4 h-fit backdrop-blur-md ${
-              shipped
-                ? 'bg-gradient-to-br from-[#05090B] to-[#05090B] !border-[#061517]'
-                : 'border-[#FFFFFF20]'
-            }`}
-          >
-            <span className="text-[#A0A0A0] text-sm font-normal bg-clip-text bg-gradient-to-r from-[#F4FFFA] to-[#675FA7]">
-              Shipped
-            </span>
-          </Badge>
-        )}
       </div>
+      {shippable && shipped && (
+        <Badge
+          className={`relative inset-0 !bg-transparent !py-1 !px-4 h-fit backdrop-blur-md ${
+            shipped
+              ? 'bg-gradient-to-br from-[#05090B] to-[#05090B] !border-[#061517]'
+              : 'border-[#FFFFFF20]'
+          }`}
+        >
+          <span className="text-[#A0A0A0] text-sm font-normal bg-clip-text bg-gradient-to-r from-[#F4FFFA] to-[#675FA7]">
+            Shipped
+          </span>
+        </Badge>
+      )}
       {shipped && <span className="text-scale-1200 text-lg mt-3 sm:mt-0">{title}</span>}
-      {!shipped && (
+      {shippable && !shipped && (
         <span className="text-sm font-normal text-[#A0A0A0] mt-3 sm:mt-0 flex items-center gap-2 md:gap-4">
           <svg
             width="17"

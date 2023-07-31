@@ -21,6 +21,8 @@ const AnimatedParticles = dynamic(
   () => import('~/components/LaunchWeek/8/AnimatedParticles/ParticlesCanvas')
 )
 const LW8Releases = dynamic(() => import('~/components/LaunchWeek/8/Releases'))
+const LW8Meetups = dynamic(() => import('~/components/LaunchWeek/8/LW8Meetups'))
+const LWArchive = dynamic(() => import('~/components/LaunchWeek/8/LWArchive'))
 const TicketContainer = dynamic(() => import('~/components/LaunchWeek/8/Ticket/TicketContainer'))
 const LaunchWeekPrizeSection = dynamic(
   () => import('~/components/LaunchWeek/8/LaunchWeekPrizeSection')
@@ -132,40 +134,46 @@ export default function TicketHome({ users }: Props) {
       >
         <DefaultLayout>
           <div className="-mt-[65px]">
-            <div className="relative">
-              <div className="relative z-10">
-                <SectionContainer className="relative flex flex-col justify-around items-center min-h-[600px] lg:min-h-[600px] !py-4 md:!py-8 lg:!pb-0 gap-2 md:gap-4 !px-0 !mx-auto">
-                  <div className="absolute bottom-0 z-10 w-full justify-center flex items-end">
-                    <LaunchWeekLogoHeader />
-                  </div>
-                  <div className="absolute inset-0 z-0">
-                    {supabase && <AnimatedParticles />}
-                    <Image
-                      src="/images/launchweek/8/stars.svg"
-                      alt="starts background"
-                      layout="fill"
-                      objectFit="cover"
-                      className="opacity-70"
-                      draggable={false}
-                    />
-                  </div>
-                </SectionContainer>
-                <div className="absolute w-full aspect-[1/1] md:aspect-[1.5/1] lg:aspect-[2.5/1] inset-0 z-0">
+            <div className="relative z-10">
+              <SectionContainer className="relative flex flex-col justify-around items-center min-h-[600px] lg:min-h-[600px] !py-4 md:!py-8 lg:!pb-0 gap-2 md:gap-4 !px-0 !mx-auto">
+                <div className="absolute bottom-0 z-10 w-full justify-center flex items-end">
+                  <LaunchWeekLogoHeader />
+                </div>
+                <div className="absolute inset-0 z-0">
+                  <AnimatedParticles />
                   <Image
-                    src="/images/launchweek/8/LW8-gradient.png"
+                    src="/images/launchweek/8/stars.svg"
+                    alt="starts background"
                     layout="fill"
                     objectFit="cover"
-                    objectPosition="top"
-                    priority
+                    className="opacity-70"
                     draggable={false}
                   />
                 </div>
+              </SectionContainer>
+              <div className="absolute w-full aspect-[1/1] md:aspect-[1.5/1] lg:aspect-[2.5/1] inset-0 z-0">
+                <Image
+                  src="/images/launchweek/8/LW8-gradient.png"
+                  layout="fill"
+                  objectFit="cover"
+                  objectPosition="top"
+                  priority
+                  draggable={false}
+                />
               </div>
             </div>
 
-            <div className="relative !w-full max-w-[100vw] !px-4 sm:max-w-xl md:max-w-4xl lg:max-w-7xl z-20 flex flex-col justify-around items-center pt-16 gap-2 md:gap-4 !mx-auto">
+            <SectionContainer className="!pb-0">
               <LW8Releases />
-            </div>
+            </SectionContainer>
+
+            <SectionContainer>
+              <LW8Meetups />
+            </SectionContainer>
+
+            <SectionContainer>
+              <LWArchive />
+            </SectionContainer>
 
             <div className="relative !w-full max-w-[100vw] min-h-[400px] !px-4 sm:max-w-xl md:max-w-4xl lg:max-w-7xl z-20 flex flex-col justify-around items-center !py-4 md:!py-8 lg:!pb-0 gap-2 md:gap-4 !mx-auto">
               {supabase && (
@@ -178,8 +186,8 @@ export default function TicketHome({ users }: Props) {
                 </div>
               )}
             </div>
-            <SectionContainer className="!pt-8 !px-4 w-full">
-              <LaunchWeekPrizeSection className="" />
+            <SectionContainer className="!px-4 w-full">
+              <LaunchWeekPrizeSection />
             </SectionContainer>
             {users && <TicketBrickWall users={users.slice(0, 17)} />}
           </div>
@@ -194,7 +202,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
   // fetch users for the TicketBrickWall
   const { data: users } = await supabaseAdmin!
     .from('lw8_tickets_golden')
-    .select('username, golden', { count: 'exact' })
+    .select('username, golden')
     .limit(17)
 
   return {
