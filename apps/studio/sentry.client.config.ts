@@ -7,13 +7,20 @@ Sentry.init({
   dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
   tracesSampleRate: 0.01,
   debug: false,
-  beforeSend(event) {
+  beforeSend(event, hint) {
     const consent =
       typeof window !== 'undefined'
         ? localStorage.getItem(LOCAL_STORAGE_KEYS.TELEMETRY_CONSENT)
         : null
 
     if (IS_PLATFORM && consent === 'true') {
+      // Ignore invalid URL events for 99% of the time because it's using up a lot of quota.
+      const isInvalidUrlEvent = (hint.originalException as any)?.message?.includes(
+        `Failed to construct 'URL': Invalid URL`
+      )
+      if (isInvalidUrlEvent && Math.random() > 0.01) {
+        return null
+      }
       return event
     }
     return null
@@ -35,6 +42,8 @@ Sentry.init({
   ignoreErrors: [
     // Used exclusively in Monaco Editor.
     'ResizeObserver',
+    's.getModifierState is not a function',
+    /^Uncaught NetworkError: Failed to execute 'importScripts' on 'WorkerGlobalScope'/,
     // [Joshen] We currently use stripe-js for customers to save their credit card data
     // I'm unable to reproduce this error on local, staging nor prod across chrome, safari or firefox
     // Based on https://github.com/stripe/stripe-js/issues/26, it seems like this error is safe to ignore,
